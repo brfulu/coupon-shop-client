@@ -1,5 +1,5 @@
 {
-  "name": "kupoman-fe",
+  "name": "coupon-shop-client",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "vue-jwt-decode": "^0.1.0",
+    "vue-router": "^3.0.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",

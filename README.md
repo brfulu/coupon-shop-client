@@ -1,22 +1,22 @@
-# kupoman-fe
+# coupon-shop-client
 
-## Instalacija svih potrebnih biblioteka navedenih u package.json
+## Installation
 ```
 npm install -g @vue/cli
 npm install
 ```
 
-### Kompajliranje i pokretanje servera
+### Starting the server
 ```
 npm run serve
 ```
 
-### Kompajliranje i minifikacija za produkcioni kod
+### Build for prod
 ```
 npm run build
 ```
 
-### UI (prethodno instalirati @vue/cli)
+### Vue UI
 ```
 vue ui
 ```

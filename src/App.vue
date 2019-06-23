@@ -1,65 +1,63 @@
 <!-- Template je HTML parce koda koje ce biti ubaceno u DOM. 
+import { try } from 'q';
 Posto se ova komponenta renderuje u main.js, ovaj HTML kod ce zavrsiti umetnut u div sa id-jem app.
 Template mora da ima samo jedan root HTML element! -->
 <template>
   <!-- root element -->
   <div>
-    <!-- Coupons tag je zahtev da se na mestu ovog taga izrenderuje template Coupons komponente. 
-    Ovaj tag je moguc ako se komponenta doda u listu komponenti (components) u skirpt sekciji.
-    v-bind:coupons="coupons" znaci da za komponentu Coupons vezujemo promenljivu coupons 
-    (iz data() u skript zekciji, ovo je pod navodnicima) pod imenom coupons (ime promenljive je posle ':')-->
-    <Coupons v-bind:coupons="coupons"/>
+    <ul>
+      <router-link tag="li" to="/" v-if="user != null">
+        <a>Home</a>
+      </router-link>
+      <!-- <router-link tag="li" to="/shop">
+        <a>Shop</a>
+      </router-link>-->
+      <router-link tag="li" to="/user" v-if="user != null && user.role == 'ADMIN'">
+        <a>User</a>
+      </router-link>
 
-    <!-- Na slican nacin umecemo i komponentu AddCoupon (komponenta zaduzena za dodavanje novog kupona). 
-    v-on:add-coupon="addCoupon" je nacin kako da vezemo addCoupon funkciju na event add-coupon.
-    Ukoliko komponenta AddCoupon okine event add-coupon onda ce pozvati fukcija addCoupon koja se nalazi u "methods" -->
-    <AddCoupon v-on:add-coupon="addCoupon" v-bind:shops="shops"/>
+      <li class="float-right" v-if="user != null">
+        <a href="#" @click="logout">Logout</a>
+      </li>
+
+      <router-link tag="li" to="/login" v-else>
+        <a>Login</a>
+      </router-link>
+
+      <li class="float-right" v-if="user != null">
+        <p>{{ user.firstName }} {{ user.lastName }}</p>
+      </li>
+    </ul>
+
+    <router-view v-on:login="login" v-bind:user="user"></router-view>
   </div>
 </template>
 
 <script>
-/* Pre nego sto budemo uopste mogli da koristimo komponente u 
-template-u moramo da ih importujemo i zaregistrujemo u "components" */
-import Coupons from "./components/Coupons";
-import AddCoupon from "./components/AddCoupon";
-
-/* Importovali smo svoja dva modula za klijente. Klijenti ce pozivati BE.
-*/
-import CouponClient from "@/clients/coupon-client.js"
-import ShopClient from "@/clients/shop-client.js"
-
 export default {
-  name: "app",  // name: Definise ime komponente
-
-  /* components: Lista komponenti. Zaregistruje importovane komponente. 
-  Ove komponente sada mozemo koristiti u template-u. */
-  components: {
-    Coupons,
-    AddCoupon
-  }, 
-
-  /* data: Mora biti funkcija koja vraca objekat. 
-  Taj objekat ce sadrzati podatke koje ce ova komponenta koristiti. 
-  Svi podaci zaregistrovani u data sekciji mogu se pristupiti sa this npr. this.coupons */
   data() {
     return {
-      coupons: [],
-      shops: []
+      user:
+        window.localStorage.getItem("user") != null
+          ? JSON.parse(window.localStorage.getItem("user"))
+          : null
     };
-  }, 
-
-  /* methods: Funkcije dostupne ovoj komponenti cak i u template-u. 
-  Kao i u data sekciji ovim metodama mozemo pristupiti sa this.*/
+  },
   methods: {
-    addCoupon(coupon) {
-      CouponClient.addCoupon(coupon, this);
+    logout() {
+      window.localStorage.removeItem("user");
+      this.user = null;
+      this.$router.push("login");
+    },
+    login(user) {
+      this.user = user;
+      this.$router.push("home");
     }
   },
-  /* created: ovde stavljamo kod koji ce se izvrsiti cim se stranica i komponente ucitaju
-   */
-  created() {
-    CouponClient.loadCoupons(this);
-    ShopClient.loadShops(this);
+  mounted() {
+    if (this.user == null) {
+      this.$router.push({ path: "/login" });
+    }
   }
 };
 </script>
@@ -68,9 +66,55 @@ export default {
 CSS biti primenjen iskljucivo na tu komponentu. -->
 
 <style>
+body {
+  background-color: #fafafa;
+}
+
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  font-size: 1em;
+  text-decoration: none;
+}
+
+li p {
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1em;
+  padding: 14px 16px;
+  margin: 0;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
+.router-link-exact-active {
+  background-color: #4caf50 !important;
+}
+
+.float-right {
+  float: right;
 }
 </style>
