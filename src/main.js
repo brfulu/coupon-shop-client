@@ -23,7 +23,7 @@ const routes = [
   { path: '/login', component: Login },
   { path: '/shop', name: 'shop', component: Shop, props: true },
   { path: '/user', component: User },
-  { path: '/home', component: Home },
+  { path: '/home', name: 'home', component: Home },
   { path: '/', component: Home }
 ];
 

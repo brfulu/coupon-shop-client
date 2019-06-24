@@ -32,6 +32,7 @@ let ShopClient = {
         console.log(deleted);
         if (deleted) {
           comp.coupons = [];
+          comp.shop = { name: comp.shop.name + ' (deleted)' }
         }
       });
   }

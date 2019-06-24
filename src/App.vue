@@ -34,6 +34,8 @@ Template mora da ima samo jedan root HTML element! -->
 </template>
 
 <script>
+import VueJwtDecode from "vue-jwt-decode";
+
 export default {
   data() {
     return {
@@ -50,11 +52,26 @@ export default {
       this.$router.push("login");
     },
     login(user) {
-      this.user = user;
-      this.$router.push("home");
+      if (user != null) {
+        this.user = user;
+        this.$router.push("home");
+      } else {
+        alert("Wrong credentials!");
+      }
     }
   },
   mounted() {
+    const now = Date.now().valueOf() / 1000;
+
+    let token = window.localStorage.getItem("token");
+    let decoded = VueJwtDecode.decode(token);
+
+    if (typeof decoded.exp !== "undefined" && decoded.exp < now) {
+      console.log(`token expired: ${JSON.stringify(decoded)}`);
+      this.$router.push({ path: "/login" });
+      this.user = null;
+    }
+
     if (this.user == null) {
       this.$router.push({ path: "/login" });
     }

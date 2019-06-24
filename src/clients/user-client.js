@@ -57,10 +57,21 @@ let UserClient = {
       body: JSON.stringify(user)
     })
       .then(function (response) {
-        return response.json();
+        if (response.status == 200) {
+          return response.json();
+        }
+        if (response.status == 401) {
+          throw "You don't have the right privileges for this operation!";
+        } else {
+          throw "Error while adding new user!";
+        }
       })
       .then(function (response) {
+        alert('User added successfully!');
         console.log(response);
+      })
+      .catch(function (error) {
+        alert(error);
       });
   }
 };

@@ -3,7 +3,7 @@ const domainUrl = "http://localhost:8080/api";
 let CouponClient = {
   loadCoupons(pageInfo, comp) {
     let token = window.localStorage.getItem('token');
-    fetch(domainUrl + "/coupons?size=4&page=" + pageInfo.page + "&active=" + pageInfo.active, {
+    fetch(domainUrl + "/coupons?size=10&page=" + pageInfo.page + "&active=" + pageInfo.active, {
       method: "GET",
       headers: {
         "Authorization": "Bearer " + token

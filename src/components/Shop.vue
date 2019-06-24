@@ -13,6 +13,7 @@
 import Coupons from "./Coupons";
 import CouponClient from "@/clients/coupon-client.js";
 import ShopClient from "@/clients/shop-client.js";
+import { constants } from "fs";
 
 export default {
   components: {
@@ -26,6 +27,12 @@ export default {
     deleteCoupon(id) {
       CouponClient.deleteCoupon(id, this);
       // CouponClient.loadCoupons({ page: 1, active: false }, this);
+    }
+  },
+  mounted() {
+    console.log(this.shop);
+    if (this.shop == undefined) {
+      this.$router.push({ name: "home" });
     }
   }
 };

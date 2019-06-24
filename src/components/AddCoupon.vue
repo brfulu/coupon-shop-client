@@ -19,17 +19,17 @@
 
       <div class="form-group">
         <label>Original Price:</label>
-        <input type="number" step="0.01" v-model.number="originalPrice">
+        <input type="number" step="0.01" v-model.number="originalPrice" required>
       </div>
 
       <div class="form-group">
         <label>Discount Price:</label>
-        <input type="number" step="0.01" v-model.number="discountPrice">
+        <input type="number" step="0.01" v-model.number="discountPrice" required>
       </div>
 
       <div class="form-group">
         <label>Valid From:</label>
-        <input type="date" v-model="validFrom">
+        <input type="date" v-model="validFrom" required>
       </div>
 
       <div class="form-group">
