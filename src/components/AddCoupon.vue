@@ -67,24 +67,31 @@ export default {
 
       // Kreiramo kupon onako kako ga BE ocekuje na osnovu polja u data() koja su popunjena od strane template-a
       let validTo =
-        this.validTo != null ? this.validTo.toString() + "T00:00:00.0Z" : null;
+        this.validTo != null ? this.validTo.toString() + "T01:00:00.0Z" : null;
+
+      let validFrom = this.validFrom.toString() + "T01:00:00.0Z";
+
+      if (validTo != null && validTo < validFrom) {
+        alert("ValidTo date must be after ValidFrom date!");
+        return false;
+      }
+
+      if (parseFloat(this.discountPrice) > parseFloat(this.originalPrice)) {
+        alert("Discount price must be less than original price!");
+        return false;
+      }
 
       const newCoupon = {
         shop: this.selectedShop,
         product: this.product,
         originalPrice: this.originalPrice,
         discountPrice: this.discountPrice,
-        validFrom: this.validFrom.toString() + "T00:00:00.0Z",
+        validFrom: this.validFrom.toString() + "T01:00:00.0Z",
         validTo: validTo
       };
 
-      /* Kreiramo event koji ce isplivati do parent-a sa $emit funkcijom i prosledjujemo mu novokreirani kupon. 
-      Ovaj event ce se zvati add-coupon. Parent ce uhvatiti ovaj event sa v-on:add-coupon. Ovo radimo jer je parent
-      vlasnik svih kupona i parent je taj koji ima logiku za kontaktiranje BE.
-      */
       this.$emit("add-coupon", newCoupon);
 
-      // Vracamo sve vrednosti na staro
       this.shop = this.shops[0];
       this.product = "";
       this.originalPrice = 0;

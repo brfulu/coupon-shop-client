@@ -3,7 +3,7 @@
     <h1>Coupons</h1>
     <form v-if="pagination" v-on:submit="filter">
       <div class="form-group">
-        <label>Only active:</label>
+        <label>Show active:</label>
         <input v-model="active" class="mr" type="checkbox">
         <button type="submit">Filter</button>
       </div>
